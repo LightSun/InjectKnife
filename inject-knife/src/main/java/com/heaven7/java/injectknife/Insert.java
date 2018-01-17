@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * insert method
+ * insert method rule
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
