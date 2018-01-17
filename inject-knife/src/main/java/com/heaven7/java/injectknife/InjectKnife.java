@@ -145,12 +145,12 @@ public class InjectKnife {
                             return false;
                         }
                  ).forEachOrdered(method -> {
-                        invokeImpl(flag, o, method, params);
+                        invokeImpl(o, method, flag, params);
                 })
             );
         }
 
-        private void invokeImpl(int flag, InjectObserver o, Method method, Object[] params) {
+        private void invokeImpl(InjectObserver o, Method method, int flag, Object[] params) {
             final Object[] parameters = mParamSupplier != null ? mParamSupplier.getParameters(
                     mProvider, o, flag) : null;
             try {
