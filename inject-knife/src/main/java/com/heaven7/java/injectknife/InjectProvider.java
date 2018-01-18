@@ -1,7 +1,14 @@
 package com.heaven7.java.injectknife;
 
+/**
+ * the inject provider
+ */
 public interface InjectProvider {
 
-    InjectKnife.MethodInjector getMethodInjector();
+    /**
+     * get the method injector which help we fast inject method.
+     * @return the method injector.
+     */
+    InjectKnife.MethodInjector getInjector();
 
 }
