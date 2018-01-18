@@ -1,16 +1,18 @@
 package injectknife.test;
 
 import com.heaven7.java.injectknife.*;
+import com.heaven7.java.injectknife.internal.InjectService;
+import com.heaven7.java.injectknife.internal.ProvideMethod;
 import org.junit.Test;
 
-@InjectService(MainActivity__$Flags.class)
-public class MainActivity implements InjectProvider , InjectParameterSupplier{
+@InjectService(SimpleTest__$Inject$Service.class)
+public class SimpleTest implements InjectProvider , InjectParameterSupplier{
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "SimpleTest";
 
     private final InjectKnife.MethodInjector injector;
 
-    public MainActivity() {
+    public SimpleTest() {
         injector = InjectKnife.from(this, new ObserverImpl());
     }
 
@@ -21,20 +23,20 @@ public class MainActivity implements InjectProvider , InjectParameterSupplier{
         getInjector().inject();
     }
 
-    public void onCreate(int x){
-        //不支持重载
-        //getInjector().inject(new Class<?>[]{int.class}, x);
-    }
-
     @Test
     @ProvideMethod
     public void onStart(){
         getInjector().inject();
     }
+
     @Test
     @ProvideMethod
     public void onDestroy(){
         getInjector().inject();
+    }
+    public void onCreate(int x){
+        //不支持重载
+        //getInjector().inject(new Class<?>[]{int.class}, x);
     }
 
     @Override

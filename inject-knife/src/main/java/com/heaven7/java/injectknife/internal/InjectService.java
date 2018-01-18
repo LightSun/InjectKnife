@@ -1,4 +1,4 @@
-package com.heaven7.java.injectknife;
+package com.heaven7.java.injectknife.internal;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

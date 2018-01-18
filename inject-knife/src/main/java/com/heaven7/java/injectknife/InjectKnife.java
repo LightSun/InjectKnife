@@ -1,5 +1,7 @@
 package com.heaven7.java.injectknife;
 
+import com.heaven7.java.injectknife.internal.InjectService;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -53,18 +55,6 @@ public class InjectKnife {
         }while (pro == null && !clazz.getName().startsWith("java.")
                 && !clazz.getName().startsWith("android."));
         return pro;
-    }
-
-    private static void logCallStack() {
-        StackTraceElement[] stackTraceElements = new Throwable().getStackTrace();
-        for (int i = 0; i < stackTraceElements.length; i++) {
-            StackTraceElement stackTraceElement = stackTraceElements[i];
-            System.out.println("index=" + i + "----------------------------------");
-            System.out.println("className=" + stackTraceElement.getClassName());
-            //System.out.println("fileName=" + stackTraceElement.getFileName());
-            System.out.println("methodName=" + stackTraceElement.getMethodName());
-           // System.out.println("lineNumber=" + stackTraceElement.getLineNumber());
-        }
     }
 
     public static class MethodInjector {

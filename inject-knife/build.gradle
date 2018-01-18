@@ -1,15 +1,41 @@
-group 'com.heaven7.java.injectknife'
-version '1.0'
+/*group 'com.heaven7.java.injectknife'
+version '1.0'*/
 
 apply plugin: 'java'
+apply plugin: 'com.novoda.bintray-release'
 
 sourceCompatibility = 1.8
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.8.0'
+    }
+}
+
 repositories {
-    mavenCentral()
     jcenter()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+allprojects {
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+    }
+}
+
+
+publish {
+    userOrg = 'lightsun'
+    groupId = 'com.heaven7.java.injectknife'
+    artifactId = 'inject-knife'
+    publishVersion = '1.0'
+    desc = 'This is a inject lib of java . which can inject callback for any object.'
+    website = 'https://github.com/LightSun/InjectKnife'
 }
