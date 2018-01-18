@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * insert method rule
+ * @author heaven7
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

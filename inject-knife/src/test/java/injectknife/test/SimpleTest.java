@@ -8,8 +8,6 @@ import org.junit.Test;
 @InjectService(SimpleTest__$Inject$Service.class)
 public class SimpleTest implements InjectProvider , InjectParameterSupplier{
 
-    private static final String TAG = "SimpleTest";
-
     private final InjectKnife.MethodInjector injector;
 
     public SimpleTest() {

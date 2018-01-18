@@ -13,6 +13,10 @@ import java.util.WeakHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+/**
+ * the inject knife
+ * @author heaven7
+ */
 public class InjectKnife {
 
     private static final WeakHashMap<Class<? extends InjectProvider>, Class<?>> sGenClassMap;
@@ -21,12 +25,29 @@ public class InjectKnife {
         sGenClassMap = new WeakHashMap<>();
     }
 
+    /**
+     * create method injector from provider.
+     * @param provider the inject provider
+     * @return  method injector
+     */
     public static MethodInjector from(InjectProvider provider){
         return new MethodInjector(provider);
     }
+    /**
+     * create method injector from provider and parameter supplier
+     * @param provider the inject provider
+     * @param supplier the parameter supplier
+     * @return  method injector
+     */
     public static MethodInjector from(InjectProvider provider, InjectParameterSupplier supplier){
         return new MethodInjector(provider, supplier);
     }
+    /**
+     * create method injector from provider and add target observer.
+     * @param provider the inject provider
+     * @param observer the inject observer
+     * @return  method injector
+     */
     public static MethodInjector from(InjectProvider provider, InjectObserver observer){
         return from(provider).withInjectObserver(observer);
     }
@@ -46,7 +67,6 @@ public class InjectKnife {
         }
         return target;
     }
-
     private static InjectService getInjectService(Class<?> clazz) {
         InjectService pro;
         do{
@@ -57,6 +77,10 @@ public class InjectKnife {
         return pro;
     }
 
+    /**
+     * the method injector.
+     * @author heaven7
+     */
     public static class MethodInjector {
         private static final String PREX_FLAG = "FLAG_";
         private static final WeakHashMap<Class<?>, List<Method>> sMethodsMap; //insertor, methods
@@ -80,11 +104,20 @@ public class InjectKnife {
                     (InjectParameterSupplier) provider : null): supplier;
         }
 
+        /**
+         * convenient method for {@linkplain #addInjectObserver(InjectObserver)}
+         * @param observer the inject observer
+         * @return this
+         */
         public MethodInjector withInjectObserver(InjectObserver observer){
             addInjectObserver(observer);
             return this;
         }
 
+        /**
+         * add inject observer
+         * @param observer the observer to add
+         */
         public void addInjectObserver(InjectObserver observer){
             if(mObservers.contains(observer)){
                 return;
@@ -100,6 +133,11 @@ public class InjectKnife {
                 sMethodsMap.put(clazz, methods);
             }
         }
+
+        /**
+         * remove inject observer
+         * @param observer the inject observer
+         */
         public void removeInjectObserver(InjectObserver observer){
             mObservers.remove(observer);
         }
