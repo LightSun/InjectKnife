@@ -5,7 +5,7 @@
   <vendor email="donshine723@gmail.com" url="https://github.com/LightSun/InjectKnife">heaven7</vendor>
 
   <description><![CDATA[
-     this is the inject knife plugin.
+     This is a inject lib of java . which can inject callback for any object.
     ]]></description>
 
   <change-notes><![CDATA[

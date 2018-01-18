@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class InjectServiceGenerator {
 
-    private static final String SUFFIX = "_$Inject$Service";
+    private static final String SUFFIX = "_$InjectService$";
     private static final String QN_KEEP_FIELDS    = "com.heaven7.java.injectknife.internal.KeepFields";
     private static final String QN_INJECT_SERVICE = "com.heaven7.java.injectknife.internal.InjectService";
     private static final String QN_PROVIDE_METHOD = "com.heaven7.java.injectknife.internal.ProvideMethod";
