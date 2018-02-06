@@ -1,0 +1,11 @@
+apply plugin: 'groovy'
+
+dependencies {
+    //implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile gradleApi()
+    compile 'com.android.tools.build:gradle:3.0.1'
+    compile 'org.javassist:javassist:3.20.0-GA'
+}
+
+//sourceCompatibility = "1.7"
+//targetCompatibility = "1.7"

@@ -11,7 +11,8 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
     private final InjectKnife.MethodInjector injector;
 
     public SimpleTest() {
-        injector = InjectKnife.from(this, new ObserverImpl());
+        injector = InjectKnife.from(this, new ObserverImpl())
+                .withInjectObserver(new ObserverImpl2());
     }
 
     //最终可以字节码注入
@@ -19,6 +20,7 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
     @ProvideMethod
     public void onCreate(){
         getInjector().inject();
+        System.out.println(InjectProvider.class.isAssignableFrom(getClass()));
     }
 
     @Test
