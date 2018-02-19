@@ -34,11 +34,6 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
     public void onDestroy(){
         getInjector().inject();
     }
-    public void onCreate(int x){
-        //不支持重载
-        //getInjector().inject(new Class<?>[]{int.class}, x);
-    }
-
     @Override
     public InjectKnife.MethodInjector getInjector() {
         return injector;
