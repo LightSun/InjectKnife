@@ -179,6 +179,7 @@ public class InjectKnife {
         }
 
         private void invokeImpl(InjectObserver o, Method method, int flag, Object[] params) {
+            //prefer supplier params.
             final Object[] parameters = mParamSupplier != null ? mParamSupplier.getParameters(
                     mProvider, o, flag) : null;
             try {
