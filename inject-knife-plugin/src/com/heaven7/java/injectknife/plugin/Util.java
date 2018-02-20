@@ -5,6 +5,11 @@ package com.heaven7.java.injectknife.plugin;
  */
 public class Util {
 
+  /*  public static boolean isInjectKnifeMethod(PsiMethod method){
+        return !method.isConstructor() && !method.getModifierList()
+                .hasModifierProperty(PsiModifier.STATIC);
+    }*/
+
     public static void logError(Object... objs) {
         log(true, objs);
     }

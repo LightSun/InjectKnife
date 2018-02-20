@@ -5,6 +5,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
@@ -43,9 +44,13 @@ public class GenerateDialog extends DialogWrapper {
     private void setUpMethods(PsiClass psiClass) {
         List<PsiMethod> methods = new ArrayList<>();
         for(PsiMethod m : psiClass.getMethods()){
-            if(!m.isConstructor()){
-                methods.add(m);
+            if(m.isConstructor()){
+                continue;
             }
+            if(m.getModifierList().hasModifierProperty(PsiModifier.STATIC)){
+                continue;
+            }
+            methods.add(m);
         }
         methodsCollection.add(methods);
     }
