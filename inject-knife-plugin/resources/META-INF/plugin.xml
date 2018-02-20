@@ -27,7 +27,7 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="convertBeanForDataMediatorNew" class="com.heaven7.java.injectknife.plugin.InjectAction"
+    <action id="heaven7_injectKnifeNew" class="com.heaven7.java.injectknife.plugin.InjectAction"
             text="Inject-Knife"
             description="inject callbacks method to any object.">
       <add-to-group group-id="GenerateGroup" anchor="last"/>
