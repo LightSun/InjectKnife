@@ -1,9 +1,11 @@
-package injectknife.test;
+package com.heaven7.android.injectknife.gradle.sample.test;
 
-import com.heaven7.java.injectknife.*;
+import com.heaven7.java.injectknife.InjectKnife;
+import com.heaven7.java.injectknife.InjectObserver;
+import com.heaven7.java.injectknife.InjectParameterSupplier;
+import com.heaven7.java.injectknife.InjectProvider;
 import com.heaven7.java.injectknife.internal.InjectService;
 import com.heaven7.java.injectknife.internal.ProvideMethod;
-import org.junit.Test;
 
 @InjectService(SimpleTest_$InjectService$.class)
 public class SimpleTest implements InjectProvider , InjectParameterSupplier{
@@ -16,23 +18,19 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
     }
 
     //最终可以字节码注入
-    @Test
     @ProvideMethod
     public void onCreate(){
-        getInjector().inject();
-        System.out.println(InjectProvider.class.isAssignableFrom(getClass()));
+        //getInjector().inject();
     }
 
-    @Test
     @ProvideMethod
     public void onStart(){
-        getInjector().inject();
+       // getInjector().inject();
     }
 
-    @Test
     @ProvideMethod
     public void onDestroy(){
-        getInjector().inject();
+       // getInjector().inject();
     }
     @Override
     public InjectKnife.MethodInjector getInjector() {
@@ -45,4 +43,5 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
                 + " ,methodFlag = " + methodFlag);
         return new Object[0];
     }
+
 }

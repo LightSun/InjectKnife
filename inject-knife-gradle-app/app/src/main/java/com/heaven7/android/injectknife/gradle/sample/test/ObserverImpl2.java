@@ -1,4 +1,4 @@
-package injectknife.test;
+package com.heaven7.android.injectknife.gradle.sample.test;
 
 
 import com.heaven7.java.injectknife.InjectObserver;

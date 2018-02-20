@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.heaven7.android.injectknife.gradle.InjectKnifePlugin'
+apply plugin: 'com.heaven7.android.injectknife.gradle'
 
 android {
     compileSdkVersion 26
@@ -16,6 +18,36 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    applicationVariants.all { variant->
+        def dexTask = project.tasks.findByName("transformClassesWithDexForDebug")
+        def preDexTask = project.tasks.findByName("transformClassesWithPreDexForDebug")
+        if(preDexTask) {
+            project.logger.error "======preDexTask======"
+            preDexTask.inputs.files.files.each {file ->
+                project.logger.error "inputs =$file.absolutePath"
+            }
+
+            preDexTask.outputs.files.files.each {file ->
+                project.logger.error "outputs =$file.absolutePath"
+            }
+        }
+        if(dexTask) {
+            project.logger.error "======dexTask======"
+            dexTask.inputs.files.files.each {file ->
+                project.logger.error "inputs =$file.absolutePath"
+            }
+
+            dexTask.outputs.files.files.each {file ->
+                project.logger.error "outputs =$file.absolutePath"
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -24,5 +56,10 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1'){
+        exclude group: 'com.google.code.findbugs'
+    }
+
+    implementation 'com.heaven7.java.injectknife:inject-knife:1.0.1'
+    //compile project(':inject-knife-gradle')
 }

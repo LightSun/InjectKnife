@@ -1,9 +1,9 @@
-package injectknife.test;
+package com.heaven7.android.injectknife.gradle.sample.test;
 
 import com.heaven7.java.injectknife.internal.KeepFields;
 
 @KeepFields
-public final class SimpleTest__$Inject$Service {
+public final class SimpleTest_$InjectService$ {
     public static final int FLAG_onCreate = 1;
     public static final int FLAG_onStart = 2;
     public static final int FLAG_onDestroy = 4;

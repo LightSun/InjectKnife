@@ -2,7 +2,9 @@ package com.heaven7.android.injectknife.gradle
 
 import javassist.ClassPool
 import javassist.CtClass
+import javassist.CtMethod
 import org.apache.commons.io.FileUtils
+import org.gradle.api.Project
 
 /**
  * inject impl
@@ -28,25 +30,25 @@ class InjectImpl {
      * --- 3. Application
      * @param path 目录的路径
      */
-    public static void injectDir(String path) {
+    public static void injectDir(Project project,String path) {
         POOL.appendClassPath(path)
         File dir = new File(path)
-        if(dir.isDirectory()) {
+        if (dir.isDirectory()) {
             dir.eachFileRecurse { File file ->
 
                 String filePath = file.absolutePath
-                filePath.indexOf(path)
+                //filePath.indexOf(path)
                 if (filePath.endsWith(".class")
                         && !filePath.contains('R$')
                         && !filePath.contains('R.class')
                         && !filePath.contains("BuildConfig.class")
-                        ) {
+                ) {
                     String filePath_relative = filePath.substring(filePath.indexOf(path) + path.length() + 1)
                     int end = filePath_relative.length() - 6 // .class = 6
                     String className = filePath_relative.substring(0, end)
                             .replace('\\', '.')
-                            .replace('/','.')
-                    injectClass(className, path)
+                            .replace('/', '.')
+                    injectClass(project, className, path)
                 }
             }
         }
@@ -56,13 +58,12 @@ class InjectImpl {
      * 这里需要将jar包先解压，注入代码后再重新生成jar包
      * @path jar包的绝对路径
      */
-    public static void injectJar(String path) {
+    public static void injectJar(Project project,String path) {
         if (path.endsWith(".jar")) {
             File jarFile = new File(path)
 
-
             // jar包解压后的保存路径
-            String jarZipDir = jarFile.getParent() +"/"+jarFile.getName().replace('.jar','')
+            String jarZipDir = jarFile.getParent() + "/" + jarFile.getName().replace('.jar', '')
 
             // 解压jar包, 返回jar包中所有class的完整类名的集合（带.class后缀）
             List classNameList = JarZipUtil.unzipJar(path, jarZipDir)
@@ -72,13 +73,13 @@ class InjectImpl {
 
             // 注入代码
             POOL.appendClassPath(jarZipDir)
-            for(String className : classNameList) {
+            for (String className : classNameList) {
                 if (className.endsWith(".class")
                         && !className.contains('R$')
                         && !className.contains('R.class')
                         && !className.contains("BuildConfig.class")) {
-                    className = className.substring(0, className.length()-6)
-                    injectClass(className, jarZipDir)
+                    className = className.substring(0, className.length() - 6)
+                    injectClass(project, className, jarZipDir)
                 }
             }
 
@@ -90,18 +91,38 @@ class InjectImpl {
         }
     }
 
-    private static void injectClass(String className, String outPath) {
+    private static void injectClass(Project project, String className, String outPath) {
         CtClass c = POOL.getCtClass(className)
-        for(CtClass cls : c.getInterfaces()){
-            if(!cls.getName().equals("com.heaven7.java.injectknife.InjectProvider")){
-                 return;
+        for (CtClass cls : c.getInterfaces()) {
+            if (!cls.getName().equals("com.heaven7.java.injectknife.InjectProvider")) {
+                return
             }
+        }
+        def method_anno = null
+        try {
+            method_anno = Class.forName("com.heaven7.java.injectknife.internal.ProvideMethod")
+        } catch (Exception e) {
+            project.logger.error e
+            return
         }
         if (c.isFrozen()) {
             c.defrost()
         }
-        def constructor = c.getConstructors()[0];
-        constructor.insertAfter("System.out.println(com.aitsuki.hack.AntilazyLoad.class);")
+        //get method anno and inject method.\
+        c.getMethods().eachWithIndex { CtMethod ctMethod, int index ->
+            if (ctMethod.getAnnotation(method_anno) != null) {
+                StringBuilder sb = new StringBuilder()
+                String[] names = MethodUtil.getAllParamaterNames()
+                def size = names.size()
+                for (int i = 0; i < size; i++) {
+                    sb.append(names[i])
+                    if (i != size - 1) {
+                        sb.append(",")
+                    }
+                }
+                ctMethod.insertAfter("getInjector().inject(" + sb.toString() + ");")
+            }
+        }
         c.writeFile(outPath)
     }
 
