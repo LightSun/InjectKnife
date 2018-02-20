@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.heaven7.java.injectknife.plugin</id>
   <name>Inject-Knife</name>
-  <version>1.0</version>
+  <version>1.0.1</version>
   <vendor email="donshine723@gmail.com" url="https://github.com/LightSun/InjectKnife">heaven7</vendor>
 
   <description><![CDATA[
