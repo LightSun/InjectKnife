@@ -1,0 +1,59 @@
+for publish local maven:
+ 1,  root build.gradle:
+
+   buildscript {
+
+       repositories {
+           google()
+           jcenter()
+           mavenCentral()
+           //add this
+           maven {
+               url uri('../repo')
+               }
+
+       }
+       dependencies {
+           classpath 'com.android.tools.build:gradle:3.0.1'
+            //...
+           // annotation below.
+            //classpath 'com.heaven7.android.injectknife.gradle:inject-knife-gradle:1.0.1'
+       }
+   }
+2, app module:
+  //apply plugin: 'com.heaven7.android.injectknife.gradle'
+  implementation project(':inject-knife-gradle')
+
+3, gradle plugin module:
+  apply plugin: 'maven'
+  uploadArchives {
+      repositories {
+          mavenDeployer {
+              repository(url: uri('../../repo'))
+          }
+      }
+  }
+  //and in this module : use cmd 'gradle uploadArchives'  to publish to local repo.
+
+=======================================================================
+for publish bintray:
+     1, root gradle:
+           /*  maven {
+                    url uri('../repo')
+                    } */
+          classpath 'com.novoda:bintray-release:0.8.0'
+     2,  app module
+           //apply plugin: 'com.heaven7.android.injectknife.gradle'
+           implementation project(':inject-knife-gradle')
+
+=======================================================================
+refer local maven:
+  1, root gradle
+    maven {
+           url uri('../repo')
+           }
+    classpath 'com.heaven7.android.injectknife.gradle:inject-knife-gradle:1.0.1' //like this
+  2, in app module:
+    //  implementation project(':inject-knife-gradle')
+     apply plugin: 'com.heaven7.android.injectknife.gradle'
+
