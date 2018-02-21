@@ -1,3 +1,4 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
@@ -6,7 +7,6 @@ version='1.0.1'
 
 repositories {
     jcenter()
-    mavenCentral()
 }
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -17,13 +17,19 @@ dependencies {
     implementation 'com.heaven7.java.injectknife:inject-knife:1.0.1'
 }
 
-uploadArchives {
+/*uploadArchives {
     repositories {
         mavenDeployer {
             repository(url: uri('../../repo'))
         }
     }
-}
+}*/
 
-//sourceCompatibility = "1.7"
-//targetCompatibility = "1.7"
+publish {
+    userOrg = 'lightsun'
+    groupId = 'com.heaven7.android.injectknife.gradle'
+    artifactId = 'inject-knife-gradle'
+    publishVersion = '1.0.1'
+    desc = 'gradle plugin of inject callbacks'
+    website = 'https://github.com/LightSun/InjectKnife'
+}
