@@ -8,22 +8,22 @@ public class ObserverImpl implements InjectObserver {
 
     @Insert(SimpleTest_$InjectService$.FLAG_onDestroy | SimpleTest_$InjectService$.FLAG_onStart)
     public void every(){
-        System.out.println("every");
+        System.out.println("ObserverImpl_every");
     }
 
     @Insert(SimpleTest_$InjectService$.FLAG_onCreate)
     public void init(){
-        System.out.println("init");
+        System.out.println("ObserverImpl_init");
     }
 
     @Insert(SimpleTest_$InjectService$.FLAG_onStart)
     public void start(){
-        System.out.println("start");
+        System.out.println("ObserverImpl_start");
     }
 
     @Insert(SimpleTest_$InjectService$.FLAG_onDestroy)
     public void destroy(){
-        System.out.println("destroy");
+        System.out.println("ObserverImpl_destroy");
     }
 
 

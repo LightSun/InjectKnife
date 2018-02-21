@@ -1,11 +1,11 @@
 package com.heaven7.android.injectknife.gradle
 
+import javassist.ClassClassPath
 import javassist.ClassPool
 import javassist.CtClass
 import javassist.CtMethod
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
-
 /**
  * inject impl
  * @auchor heaven7
@@ -14,6 +14,18 @@ class InjectImpl {
 
     private static final ClassPool POOL = ClassPool.getDefault()
 
+    static {
+        POOL.appendClassPath(new ClassClassPath(Class.forName(
+                "com.heaven7.java.injectknife.InjectObserver")))
+        POOL.appendClassPath(new ClassClassPath(Class.forName(
+                "com.heaven7.java.injectknife.InjectProvider")))
+        POOL.appendClassPath(new ClassClassPath(Class.forName(
+                "com.heaven7.java.injectknife.internal.ProvideMethod")))
+       /* POOL.appendClassPath(new ClassClassPath(Class.forName(
+                "com.heaven7.java.injectknife.InjectKnife\$MethodInjector")))
+        POOL.appendClassPath(new ClassClassPath(Class.forName(
+                "com.heaven7.java.injectknife.InjectParameterSupplier")))*/
+    }
     /**
      * add to class path
      * @param libPath
@@ -93,37 +105,42 @@ class InjectImpl {
 
     private static void injectClass(Project project, String className, String outPath) {
         CtClass c = POOL.getCtClass(className)
+        boolean found = false
         for (CtClass cls : c.getInterfaces()) {
-            if (!cls.getName().equals("com.heaven7.java.injectknife.InjectProvider")) {
-                return
+            if (cls.getName().equals("com.heaven7.java.injectknife.InjectProvider")) {
+                found = true
+                break
             }
         }
-        def method_anno = null
-        try {
-            method_anno = Class.forName("com.heaven7.java.injectknife.internal.ProvideMethod")
-        } catch (Exception e) {
-            project.logger.error e
+        if(!found){
             return
         }
+        project.logger.error("found InjectProvider for class '${className}'")
+        def method_anno = Class.forName("com.heaven7.java.injectknife.internal.ProvideMethod")
         if (c.isFrozen()) {
             c.defrost()
         }
         //get method anno and inject method.\
         c.getMethods().eachWithIndex { CtMethod ctMethod, int index ->
             if (ctMethod.getAnnotation(method_anno) != null) {
-                StringBuilder sb = new StringBuilder()
-                String[] names = MethodUtil.getAllParamaterNames()
-                def size = names.size()
-                for (int i = 0; i < size; i++) {
-                    sb.append(names[i])
-                    if (i != size - 1) {
-                        sb.append(",")
+                String[] names = MethodUtil.getAllParamaterNames(ctMethod)
+                if(names != null && names.size() > 0) {
+                    StringBuilder sb = new StringBuilder()
+                    def size = names.size()
+                    for (int i = 0; i < size; i++) {
+                        sb.append(names[i])
+                        if (i != size - 1) {
+                            sb.append(",")
+                        }
                     }
+                    ctMethod.insertAfter("getInjector().inject(" + sb.toString() + ");")
+                }else{
+                    ctMethod.insertAfter("getInjector().inject(null);")
                 }
-                ctMethod.insertAfter("getInjector().inject(" + sb.toString() + ");")
             }
         }
         c.writeFile(outPath)
+        c.detach()
     }
 
 }

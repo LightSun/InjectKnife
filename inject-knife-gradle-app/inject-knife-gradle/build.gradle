@@ -2,7 +2,7 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 
 group='com.heaven7.android.injectknife.gradle'
-version='1.0'
+version='1.0.1'
 
 repositories {
     jcenter()
@@ -14,6 +14,7 @@ dependencies {
     implementation localGroovy()
     implementation 'com.android.tools.build:gradle:3.0.1'
     implementation 'org.javassist:javassist:3.20.0-GA'
+    implementation 'com.heaven7.java.injectknife:inject-knife:1.0.1'
 }
 
 uploadArchives {

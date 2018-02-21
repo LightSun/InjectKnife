@@ -20,17 +20,14 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
     //最终可以字节码注入
     @ProvideMethod
     public void onCreate(){
-        //getInjector().inject();
     }
 
     @ProvideMethod
     public void onStart(){
-       // getInjector().inject();
     }
 
     @ProvideMethod
     public void onDestroy(){
-       // getInjector().inject();
     }
     @Override
     public InjectKnife.MethodInjector getInjector() {
