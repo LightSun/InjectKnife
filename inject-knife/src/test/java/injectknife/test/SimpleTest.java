@@ -19,20 +19,20 @@ public class SimpleTest implements InjectProvider , InjectParameterSupplier{
     @Test
     @ProvideMethod
     public void onCreate(){
-        getInjector().inject();
+        getInjector().inject(null);
         System.out.println(InjectProvider.class.isAssignableFrom(getClass()));
     }
 
     @Test
     @ProvideMethod
     public void onStart(){
-        getInjector().inject();
+        getInjector().inject(null);
     }
 
     @Test
     @ProvideMethod
     public void onDestroy(){
-        getInjector().inject();
+        getInjector().inject(null);
     }
     @Override
     public InjectKnife.MethodInjector getInjector() {

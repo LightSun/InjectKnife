@@ -144,14 +144,17 @@ public class InjectKnife {
 
         /**
          * inject by target method parameters.
+         * @param signature the method param signature
          * @param params the method parameters from provider's method.
          */
-        public void inject(Object...params){
+        public void inject(String signature, Object...params){
            // logCallStack();
             final String callMethodName = getCallMethodName();
             int flag;
             try {
-                Field field = mFlagClass.getField(PREX_FLAG + callMethodName);
+                //may have method signature , signature can resolve overload methods.
+                String extraName = (signature == null || signature.isEmpty()) ? "" : "_" + signature;
+                Field field = mFlagClass.getField(PREX_FLAG + callMethodName + extraName);
                 flag = (int) field.get(null);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 return;
