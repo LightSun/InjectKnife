@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 
 group='com.heaven7.android.injectknife.gradle'
-version='1.0.1'
+version='1.0.2'
 
 repositories {
     jcenter()
@@ -14,7 +14,7 @@ dependencies {
     implementation localGroovy()
     implementation 'com.android.tools.build:gradle:3.0.1'
     implementation 'org.javassist:javassist:3.20.0-GA'
-    implementation 'com.heaven7.java.injectknife:inject-knife:1.0.1'
+    implementation 'com.heaven7.java.injectknife:inject-knife:1.0.2'
 }
 
 /*uploadArchives {
@@ -27,9 +27,9 @@ dependencies {
 
 publish {
     userOrg = 'lightsun'
-    groupId = 'com.heaven7.android.injectknife.gradle'
+    groupId = "${group}"
     artifactId = 'inject-knife-gradle'
-    publishVersion = '1.0.1'
+    publishVersion = "${version}"
     desc = 'gradle plugin of inject callbacks'
     website = 'https://github.com/LightSun/InjectKnife'
 }

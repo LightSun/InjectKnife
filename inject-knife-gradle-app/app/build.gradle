@@ -43,10 +43,10 @@ android {
         }
     }
 
-    compileOptions {
+    /*compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
-    }
+    }*/
 }
 
 dependencies {
@@ -59,6 +59,6 @@ dependencies {
         exclude group: 'com.google.code.findbugs'
     }
 
-    implementation 'com.heaven7.java.injectknife:inject-knife:1.0.1'
+    implementation 'com.heaven7.java.injectknife:inject-knife:1.0.2'
     implementation project(':inject-knife-gradle')
 }

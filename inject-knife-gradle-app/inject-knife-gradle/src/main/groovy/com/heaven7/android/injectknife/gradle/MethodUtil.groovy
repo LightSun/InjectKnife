@@ -9,18 +9,24 @@ import java.lang.reflect.Method
 
 public class MethodUtil {
 
-    public static String[] getAllParamaterNames(CtMethod cm)
+    public static ParamInfo[] getAllParamaters(CtMethod cm)
             throws NotFoundException {
         MethodInfo methodInfo = cm.getMethodInfo();
         CodeAttribute codeAttribute = methodInfo.getCodeAttribute();
         LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute
                 .getAttribute(LocalVariableAttribute.tag);
-        int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
-        String[] paramNames = new String[cm.getParameterTypes().length];
-        for (int i = 0; i < paramNames.length; i++) {
-            paramNames[i] = attr.variableName(i + pos);
+        int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1
+
+        def types = cm.getParameterTypes();
+        final int size = types.length
+        ParamInfo[] paramNames = new ParamInfo[size]
+        for (int i = 0; i < size; i++) {
+            def info = new ParamInfo()
+            info.name = attr.variableName(i + pos)
+            info.type = types[i].getName()
+            paramNames[i] = info
         }
-        return paramNames;
+        return paramNames
     }
 
     public static String[] getAllParamaterNames(Method method)
@@ -45,4 +51,4 @@ public class MethodUtil {
         return paramNames;
     }
 
-}  
+}

@@ -123,23 +123,26 @@ class InjectImpl {
         //get method anno and inject method.\
         c.getMethods().eachWithIndex { CtMethod ctMethod, int index ->
             if (ctMethod.getAnnotation(method_anno) != null) {
-                String[] names = MethodUtil.getAllParamaterNames(ctMethod)
-                if(names != null && names.size() > 0) {
+                ParamInfo[] infos = MethodUtil.getAllParamaters(ctMethod)
+                if(infos != null && infos.size() > 0) {
+                    def sign = ""
                     StringBuilder sb = new StringBuilder()
-                    def size = names.size()
+                    def size = infos.size()
                     for (int i = 0; i < size; i++) {
-                        sb.append(names[i])
+                        sb.append(infos[i].name)
+                        sign += infos[i].type
                         if (i != size - 1) {
                             sb.append(",")
                         }
                     }
-                    ctMethod.insertAfter("getInjector().inject(" + sb.toString() + ");")
+                    ctMethod.insertAfter("getInjector().inject(" + String.valueOf(sign.hashCode()) + "," + sb.toString() + ");")
                 }else{
-                    ctMethod.insertAfter("getInjector().inject(null);")
+                    ctMethod.insertAfter("getInjector().inject(null, null);")
                 }
             }
         }
         c.writeFile(outPath)
+        //must detach or else next time will insert multi
         c.detach()
     }
 
