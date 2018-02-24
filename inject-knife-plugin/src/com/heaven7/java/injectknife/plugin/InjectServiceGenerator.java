@@ -92,9 +92,22 @@ public class InjectServiceGenerator {
         int base = 1;
         StringBuilder sb = new StringBuilder();
         for(PsiMethod method : methods){
-            sb.append("public static final int FLAG_").append(method.getName())
-                    .append(" = ").append(base).append(" ;\n");
+            sb.append("public static final int FLAG_").append(method.getName());
+                   // .append(" = ").append(base).append(" ;\n");
             base *= 2;
+            //build signature of all params.
+            PsiParameter[] parameters = method.getParameterList().getParameters();
+            if(parameters.length != 0){
+                StringBuilder sb_temp = new StringBuilder();
+                for (PsiParameter pp : parameters){
+                    sb_temp.append(pp.getType().getCanonicalText());
+                }
+                //Util.logError("method : " + method + " ,param signature = " + sb_temp.toString());
+                //java.lang.String int float injectknife.test.ObserverImpl
+                sb.append("_").append(sb_temp.toString().hashCode());
+            }
+            //add  '= 1; '
+            sb.append(" = ").append(base).append(" ;\n");
         }
         return sb.toString();
     }

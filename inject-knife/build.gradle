@@ -37,7 +37,7 @@ publish {
     userOrg = 'lightsun'
     groupId = 'com.heaven7.java.injectknife'
     artifactId = 'inject-knife'
-    publishVersion = '1.0.1'
+    publishVersion = '1.0.2'
     desc = 'This is a inject lib of java . which can inject callback for any object.'
     website = 'https://github.com/LightSun/InjectKnife'
 }
