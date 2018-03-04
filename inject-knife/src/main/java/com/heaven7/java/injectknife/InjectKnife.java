@@ -7,11 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.WeakHashMap;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * the inject knife
@@ -125,11 +122,14 @@ public class InjectKnife {
             mObservers.add(observer);
             Class<?> clazz = observer.getClass();
             if(sMethodsMap.get(clazz) == null) {
-                List<Method> methods = StreamSupport.stream( Arrays.spliterator(clazz.getMethods()), false)
-                        .filter(method -> (method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC
-                                && (method.getAnnotation(Insert.class) != null
-                                || method.getAnnotation(Inserts.class) != null)
-                        ).collect(Collectors.toList());
+                List<Method> methods = new ArrayList<>();
+                for(Method method : clazz.getMethods()){
+                    if((method.getModifiers() & Modifier.PUBLIC) == Modifier.PUBLIC
+                            && (method.getAnnotation(Insert.class) != null
+                            || method.getAnnotation(Inserts.class) != null)){
+                        methods.add(method);
+                    }
+                }
                 sMethodsMap.put(clazz, methods);
             }
         }
@@ -150,7 +150,7 @@ public class InjectKnife {
         public void inject(String signature, Object...params){
            // logCallStack();
             final String callMethodName = getCallMethodName();
-            int flag;
+            final int flag;
             try {
                 //may have method signature , signature can resolve overload methods.
                 String extraName = (signature == null || signature.isEmpty()) ? "" : "_" + signature;
@@ -160,25 +160,30 @@ public class InjectKnife {
                 return;
             }
             //filter callMethodName
-            mObservers.forEach(o ->
-                    sMethodsMap.get(o.getClass()).stream().filter(
-                        method -> {
-                            Insert insert = method.getAnnotation(Insert.class);
-                            if(insert != null){
-                                return ( insert.value() & flag)== flag;
-                            }
-                            Inserts inserts = method.getAnnotation(Inserts.class);
-                            for (Insert insert1 : inserts.value()){
-                                if(insert1.from() == mProvider.getClass()){
-                                    return ( insert1.value() & flag) == flag;
+            for(InjectObserver o : mObservers){
+                final List<Method> methods = sMethodsMap.get(o.getClass());
+                for(Method method : methods){
+                    Insert insert = method.getAnnotation(Insert.class);
+                    boolean accept = false;
+                    if(insert != null && ( insert.value() & flag)== flag){
+                        accept = true;
+                    }else{
+                        Inserts inserts = method.getAnnotation(Inserts.class);
+                        if(inserts != null ) {
+                            for (Insert insert1 : inserts.value()) {
+                                if (insert1.from() == mProvider.getClass()) {
+                                    if ((insert1.value() & flag) == flag) {
+                                        accept = true;
+                                    }
                                 }
                             }
-                            return false;
                         }
-                 ).forEachOrdered(method -> {
+                    }
+                    if(accept){
                         invokeImpl(o, method, flag, params);
-                })
-            );
+                    }
+                }
+            }
         }
 
         private void invokeImpl(InjectObserver o, Method method, int flag, Object[] params) {
@@ -189,7 +194,7 @@ public class InjectKnife {
                 if(parameters == null || parameters.length == 0) {
                     method.invoke(o, params);
                 }else{
-                    final int expectCount = method.getParameterCount();
+                    final int expectCount = method.getParameterTypes().length;
                     final int length = parameters.length;
                     if(length == expectCount){
                         method.invoke(o, parameters);
